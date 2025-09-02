@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Purchases</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #27ae60;
+            --success-color: #00b894;
+            --danger-color: #e74c3c;
+            --light-bg: #f5f6fa;
+            --card-bg: #ffffff;
+            --text-color: #34495e;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-weight: 600;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- Navbar Styles --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary-color);
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            color: #ecf0f1;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .add-book-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            border: none;
+            font-weight: 500;
+        }
+
+        .add-book-btn:hover {
+            background-color: #1e8449;
+            transform: translateY(-2px);
+        }
+
+        /* --- Login Form Styles --- */
+        #login-form {
+            max-width: 450px;
+            margin: 3rem auto;
+            padding: 2.5rem;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        #login-form h2 {
+            font-weight: 500;
+            margin-bottom: 2rem;
+        }
+
+        #login-form input {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 1.25rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        #login-form input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.2);
+        }
+
+        button.primary-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background-color 0.3s, transform 0.2s;
+            width: 100%;
+        }
+
+        .primary-btn {
+            background-color: var(--primary-color);
+        }
+
+        .primary-btn:hover {
+            background-color: #34495e;
+            transform: translateY(-2px);
+        }
+
+        #error-message {
+            color: var(--danger-color);
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+
+        /* --- Admin Panel Table Styles --- */
+        #admin-panel {
+            display: none;
+            padding: 2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            border: none;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        th:first-child,
+        td:first-child {
+            padding-left: 25px;
+        }
+
+        th:last-child,
+        td:last-child {
+            padding-right: 25px;
+        }
+
+        th {
+            background: var(--primary-color);
+            color: #ecf0f1;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: var(--light-bg);
+        }
+
+        tr:hover {
+            background-color: #e8f4f8;
+        }
+
+        .collect-btn {
+            background: var(--success-color);
+        }
+
+        .collect-btn:hover {
+            background: #008c72;
+            transform: translateY(-1px);
+        }
+
+        .delete-btn {
+            background: var(--danger-color);
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+            transform: translateY(-1px);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .status-purchased {
+            background-color: #f1c40f;
+            color: #7d6507;
+        }
+
+        .status-collected {
+            background-color: #2ecc71;
+            color: #145b34;
+        }
+
+        .status-returned {
+            background-color: #9b59b6;
+            color: #4b2a59;
+        }
+
+        /* Responsive Table */
+        @media (max-width: 900px) {
+
+            table,
+            thead,
+            tbody,
+            th,
+            td,
+            tr {
+                display: block;
+            }
+
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+
+            tr {
+                border: 1px solid var(--border-color);
+                border-radius: 12px;
+                margin-bottom: 1rem;
+                overflow: hidden;
+            }
+
+            td {
+                border: none;
+                position: relative;
+                padding-left: 50%;
+                text-align: right;
+            }
+
+            td:before {
+                content: attr(data-label);
+                position: absolute;
+                left: 15px;
+                width: calc(50% - 30px);
+                padding-right: 10px;
+                white-space: nowrap;
+                text-align: left;
+                font-weight: 500;
+            }
+        }
+
+        .no-data {
+            text-align: center;
+            font-style: italic;
+            color: #7f8c8d;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- --- Navbar (hidden by default) --- -->
+        <nav id="navbar" class="navbar" style="display: none;">
+            <h1 class="navbar-brand">Admin Panel</h1>
+            <button class="add-book-btn" onclick="location.href='admin-addbook.htm'">Add Book</button>
+        </nav>
+
+        <!-- --- Login Form --- -->
+        <div id="login-form">
+            <h2>Admin Login</h2>
+            <input type="email" id="admin-email" placeholder="Enter email" required>
+            <input type="password" id="admin-password" placeholder="Enter password" required>
+            <button class="primary-btn" onclick="checkCredentials()">Log In</button>
+            <div id="error-message"></div>
+        </div>
+
+        <!-- --- Admin Panel Table --- -->
+        <div id="admin-panel">
+            <h2>📊 Purchases (Admin Panel)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        <th>Book</th>
+                        <th>Purchase Time</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="purchasesTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getDatabase, ref, onValue, update, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+        const ADMIN_EMAIL = "shivbali@gmail.com";
+        const ADMIN_PASSWORD = "SB@5756";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCiLh2qyz_z3AYRafRRiGHJQdEPYIMRYAk",
+            authDomain: "library-management-cc7dd.firebaseapp.com",
+            databaseURL: "https://library-management-cc7dd-default-rtdb.firebaseio.com",
+            projectId: "library-management-cc7dd",
+            storageBucket: "library-management-cc7dd.appspot.com",
+            messagingSenderId: "393274759659",
+            appId: "1:393274759659:web:260174e3b3aa4d888fe1ae",
+            measurementId: "G-ZW0V646QZ3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        window.checkCredentials = function () {
+            const emailInput = document.getElementById("admin-email").value;
+            const passwordInput = document.getElementById("admin-password").value;
+            const errorMessage = document.getElementById("error-message");
+
+            if (emailInput === ADMIN_EMAIL && passwordInput === ADMIN_PASSWORD) {
+                // Show admin panel & navbar after successful login
+                document.getElementById("login-form").style.display = "none";
+                document.getElementById("admin-panel").style.display = "block";
+                document.getElementById("navbar").style.display = "flex";
+                loadPurchases();
+            } else {
+                errorMessage.textContent = "Incorrect email or password. Please try again.";
+            }
+        };
+
+        const tableBody = document.getElementById("purchasesTableBody");
+
+        function loadPurchases() {
+            onValue(ref(db, "purchases"), (snapshot) => {
+                tableBody.innerHTML = "";
+                if (!snapshot.exists()) {
+                    tableBody.innerHTML = '<tr><td colspan="8" class="no-data">No purchase records found.</td></tr>';
+                    return;
+                }
+
+                snapshot.forEach(child => {
+                    const data = child.val();
+                    const key = child.key;
+                    const statusText = data.status || (data.type === "collected" ? "Collected from Library" : "Purchased");
+
+                    let statusClass = '';
+                    if (statusText.includes("Collected")) {
+                        statusClass = 'status-collected';
+                    } else if (statusText.includes("Returned")) {
+                        statusClass = 'status-returned';
+                    } else {
+                        statusClass = 'status-purchased';
+                    }
+
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td data-label="Name">${data.name || "N/A"}</td>
+                        <td data-label="Mobile">${data.mobile || "N/A"}</td>
+                        <td data-label="Email">${data.email || "N/A"}</td>
+                        <td data-label="Book">${data.title}</td>
+                        <td data-label="Purchase Time">${new Date(data.time).toLocaleString()}</td>
+                        <td data-label="Status"><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td data-label="Action">
+                            ${data.status === "Returned" ? "✅ Returned" :
+                            data.type === "collected" ? "✅ Collected" :
+                                `<button class="collect-btn" onclick="markCollected('${key}')">Mark Collected</button>`}
+                        </td>
+                        <td data-label="Delete">
+                            <button class="delete-btn" onclick="deletePurchase('${key}')">Delete</button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            });
+        }
+
+        window.deletePurchase = function (key) {
+            if (confirm("Are you sure you want to delete this record?")) {
+                const purchaseRef = ref(db, "purchases/" + key);
+                onValue(purchaseRef, (snapshot) => {
+                    if (snapshot.exists()) {
+                        const data = snapshot.val();
+                        const userId = data.userId;
+                        const bookId = data.bookId;
+                        const userBookRef = ref(db, "users/" + userId + "/books/" + bookId);
+
+                        Promise.all([remove(userBookRef), remove(purchaseRef)])
+                            .then(() => alert("Purchase and user book deleted successfully 🗑️"))
+                            .catch(err => alert("Error deleting: " + err.message));
+                    }
+                }, { onlyOnce: true });
+            }
+        };
+
+        window.markCollected = function (key) {
+            const purchaseRef = ref(db, "purchases/" + key);
+            update(purchaseRef, { type: "collected", status: "Collected from Library" })
+                .then(() => alert("Book marked as collected 📚"))
+                .catch(err => alert("Error: " + err.message));
+        };
+    </script>
+</body>
+
+</html>

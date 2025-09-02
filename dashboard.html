@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <style>
+        /* Modern, clean font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: #4a90e2;
+            /* A vibrant, friendly blue */
+            --primary-dark: #357bd7;
+            --secondary-color: #00b894;
+            /* A fresh green for accents */
+            --accent-color: #e84393;
+            /* A pop of pink */
+            --background-light: #f4f7f9;
+            --background-dark: #2c3e50;
+            /* Dark background for navbar */
+            --text-light: #ecf0f1;
+            --text-dark: #34495e;
+            --card-bg: #ffffff;
+            --box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background: var(--background-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            box-sizing: border-box;
+            /* Ensures padding and borders are included in element's total width and height */
+        }
+
+        /* ===== Navbar ===== */
+        .navbar {
+            background: var(--background-dark);
+            color: var(--text-light);
+            padding: 1.25rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .nav-links span {
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links span::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links span:hover::after {
+            width: 100%;
+        }
+
+        .nav-links span:hover {
+            color: var(--primary-color);
+        }
+
+        .profile-menu {
+            position: relative;
+        }
+
+        .profile-btn {
+            background: var(--primary-color);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            color: white;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .profile-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: var(--card-bg);
+            color: var(--text-dark);
+            min-width: 250px;
+            box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            z-index: 10;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .profile-menu:hover .dropdown,
+        .profile-menu:focus-within .dropdown {
+            display: block;
+        }
+
+        .dropdown p {
+            margin: 8px 0;
+        }
+
+        .dropdown button {
+            width: 100%;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown button:hover {
+            background: #d6337a;
+        }
+
+        /* ===== Main Content ===== */
+        .container {
+            padding: 2.5rem;
+        }
+
+        .container h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--primary-color);
+            padding-left: 1rem;
+        }
+
+        /* ===== Book Grid ===== */
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 2rem;
+        }
+
+        .book {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .book:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .book img {
+            width: 100%;
+            height: 280px;
+            /* Fixed height for consistent cards */
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .book h3 {
+            font-size: 1.25rem;
+            margin: 0 0 5px;
+            color: var(--text-dark);
+        }
+
+        .book p {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 1rem;
+        }
+
+        .book button {
+            background: var(--secondary-color);
+            border: none;
+            padding: 10px 18px;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .book button:hover {
+            background: #00a082;
+        }
+
+        /* ===== My Books Section ===== */
+        .ebook {
+            background: var(--card-bg);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .ebook-details {
+            flex-grow: 1;
+        }
+
+        .ebook h3 {
+            margin: 0 0 5px;
+            font-size: 1.2rem;
+        }
+
+        .ebook p {
+            margin: 0;
+            color: #7f8c8d;
+        }
+
+        .ebook button {
+            background: var(--primary-color);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .ebook button:hover {
+            background: var(--primary-dark);
+        }
+
+        .collected-label {
+            display: inline-block;
+            padding: 8px 15px;
+            background: var(--secondary-color);
+            color: white;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Hamburger menu styles */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .menu-toggle .bar {
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-light);
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== Responsive design ===== */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 1rem;
+                align-items: flex-start;
+            }
+
+            .navbar h2 {
+                margin-bottom: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                gap: 1rem;
+                text-align: center;
+                padding-top: 1rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links span {
+                padding: 10px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .nav-links span:last-child {
+                border-bottom: none;
+            }
+
+            .profile-menu {
+                width: 100%;
+            }
+
+            .profile-btn {
+                width: 100%;
+                margin-top: 1rem;
+            }
+
+            .dropdown {
+                width: calc(100% - 30px);
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .menu-toggle {
+                display: flex;
+                position: absolute;
+                right: 1rem;
+                top: 1.25rem;
+            }
+
+            .menu-toggle.active .bar:first-child {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+
+            .menu-toggle.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .menu-toggle.active .bar:last-child {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+
+            .container h2 {
+                font-size: 1.8rem;
+            }
+
+            .book-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <h2>📚 Library</h2>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <span onclick="showSection('availableBooks')">Books</span>
+            <span onclick="showSection('myBooks')">My Books</span>
+        </div>
+        <div class="profile-menu">
+            <button class="profile-btn">Profile</button>
+            <div class="dropdown">
+                <p><b>Name:</b> <span id="userName">Loading...</span></p>
+                <p><b>Email:</b> <span id="userEmail">Loading...</span></p>
+                <p><b>Mobile:</b> <span id="userMobile">Loading...</span></p>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="availableBooks">
+        <h2>Available Books</h2>
+        <div class="book-grid" id="booksList"></div>
+    </div>
+
+    <div class="container hidden" id="myBooks">
+        <h2>My Books</h2>
+        <div id="userBooks"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+        import { getDatabase, ref, get, set, push, onValue, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCiLh2qyz_z3AYRafRRiGHJQdEPYIMRYAk",
+            authDomain: "library-management-cc7dd.firebaseapp.com",
+            databaseURL: "https://library-management-cc7dd-default-rtdb.firebaseio.com",
+            projectId: "library-management-cc7dd",
+            storageBucket: "library-management-cc7dd.appspot.com",
+            messagingSenderId: "393274759659",
+            appId: "1:393274759659:web:260174e3b3aa4d888fe1ae",
+            measurementId: "G-ZW0V646QZ3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
+        const booksList = document.getElementById("booksList");
+        const userBooksDiv = document.getElementById("userBooks");
+        const navLinks = document.getElementById("navLinks");
+        const menuToggle = document.querySelector(".menu-toggle");
+
+        // ✅ Toggle mobile menu
+        window.toggleMenu = function () {
+            navLinks.classList.toggle("active");
+            menuToggle.classList.toggle("active");
+        };
+
+        // ✅ Switch Sections
+        window.showSection = function (sectionId) {
+            document.getElementById("availableBooks").classList.add("hidden");
+            document.getElementById("myBooks").classList.add("hidden");
+            document.getElementById(sectionId).classList.remove("hidden");
+            // Close mobile menu after selecting a section
+            if (window.innerWidth <= 768) {
+                toggleMenu();
+            }
+        };
+
+        // ✅ Fetch Books from Admin
+        onValue(ref(db, "books"), (snapshot) => {
+            booksList.innerHTML = "";
+            snapshot.forEach(child => {
+                const book = child.val();
+                const div = document.createElement("div");
+                div.className = "book";
+                div.innerHTML = `
+                <img src="${book.img}" alt="${book.title}">
+                <h3>${book.title}</h3>
+                <p>By ${book.author}</p>
+                <button onclick="buyBook('${book.id}', '${book.title}', '${book.author}', '${book.pdf}')">Buy</button>
+                <button onclick="collectBook('${book.id}', '${book.title}', '${book.author}', '${book.pdf}')">Collect from Library</button>
+            `;
+                booksList.appendChild(div);
+            });
+        });
+
+        // ✅ User Auth + Profile
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const userRef = ref(db, "users/" + user.uid);
+                get(userRef).then(snapshot => {
+                    if (snapshot.exists()) {
+                        const data = snapshot.val();
+                        document.getElementById("userName").textContent = data.name || "N/A";
+                        document.getElementById("userEmail").textContent = data.email || "N/A";
+                        document.getElementById("userMobile").textContent = data.mobile || "N/A";
+
+                        if (data.books) {
+                            renderUserBooks(data.books);
+                        }
+                    }
+                });
+            } else {
+                window.location.href = "index.html";
+            }
+        });
+
+        // ✅ Buy Book
+        window.buyBook = function (bookId, title, author, pdf) {
+            const user = auth.currentUser;
+            if (!user) return alert("Please login");
+
+            const bookData = { id: bookId, title, author, pdf, collected: false };
+
+            const userBookRef = ref(db, "users/" + user.uid + "/books/" + bookId);
+            set(userBookRef, bookData).then(() => {
+                get(ref(db, "users/" + user.uid)).then(snapshot => {
+                    if (snapshot.exists()) {
+                        const userData = snapshot.val();
+                        const purchaseRef = push(ref(db, "purchases"));
+                        set(purchaseRef, {
+                            userId: user.uid,
+                            bookId,
+                            title,
+                            author,
+                            email: userData.email,
+                            name: userData.name,
+                            mobile: userData.mobile,
+                            time: new Date().toISOString(),
+                            type: "purchase"
+                        });
+                        alert(`You purchased ${title} 🎉`);
+                        renderUserBooks({ [bookId]: bookData });
+                    }
+                });
+            });
+        };
+
+        // ✅ Collect from Library
+        window.collectBook = function (bookId, title, author, pdf) {
+            const user = auth.currentUser;
+            if (!user) return alert("Please login");
+
+            const bookData = { id: bookId, title, author, pdf, collected: true };
+
+            const userBookRef = ref(db, "users/" + user.uid + "/books/" + bookId);
+            set(userBookRef, bookData).then(() => {
+                get(ref(db, "users/" + user.uid)).then(snapshot => {
+                    if (snapshot.exists()) {
+                        const userData = snapshot.val();
+                        const purchaseRef = push(ref(db, "purchases"));
+                        set(purchaseRef, {
+                            userId: user.uid,
+                            bookId,
+                            title,
+                            author,
+                            email: userData.email,
+                            name: userData.name,
+                            mobile: userData.mobile,
+                            time: new Date().toISOString(),
+                            type: "collected"
+                        });
+                        alert(`collect ${title} from the library 📚`);
+                        renderUserBooks({ [bookId]: bookData });
+                    }
+                });
+            });
+        };
+
+        // ✅ Render User Books
+        function renderUserBooks(userBooks) {
+            userBooksDiv.innerHTML = "";
+            Object.values(userBooks).forEach(book => {
+                const div = document.createElement("div");
+                div.className = "ebook";
+                div.innerHTML = `
+                <div class="ebook-details">
+                    <h3>${book.title}</h3>
+                    <p>By ${book.author}</p>
+                </div>
+                <div>
+                    ${book.collected
+                        ? `<span class="collected-label">Please Collect from Library</span>`
+                        : `<button onclick="window.open('${book.pdf}', '_blank')">View PDF</button>`}
+                </div>
+            `;
+                userBooksDiv.appendChild(div);
+            });
+        }
+
+        // ✅ Logout
+        window.logout = function () {
+            signOut(auth).then(() => {
+                alert("Logged out ✅");
+                window.location.href = "index.html";
+            });
+        };
+    </script>
+</body>
+
+</html>
