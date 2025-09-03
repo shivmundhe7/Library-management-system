@@ -35,9 +35,8 @@
             margin-bottom: 2rem;
             text-transform: uppercase;
             color: #fff;
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8),
-                0 0 20px rgba(0, 255, 255, 0.6),
-                0 0 30px rgba(0, 255, 255, 0.4);
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            /* 50% black text shadow */
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             text-align: center;
             /* This centers the text for all screen sizes */
@@ -45,9 +44,8 @@
 
         h2:hover {
             transform: scale(1.05);
-            text-shadow: 0 0 15px rgba(0, 255, 255, 1),
-                0 0 30px rgba(0, 255, 255, 0.8),
-                0 0 45px rgba(0, 255, 255, 0.6);
+            text-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+            /* Slightly darker shadow on hover */
         }
 
         /* ===== Form Container ===== */
@@ -58,19 +56,16 @@
             padding: 2.5rem;
             border-radius: 12px;
             background: rgba(10, 20, 30, 0.7);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5),
-                inset 0 0 10px rgba(0, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(8px);
-            border: 1px solid rgba(0, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             text-align: center;
             transition: all 0.5s ease-in-out;
-            transform: perspective(1000px) rotateY(0deg);
         }
 
         .form-box:hover {
-            transform: perspective(1000px) rotateY(2deg) scale(1.02);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7),
-                inset 0 0 15px rgba(0, 255, 255, 0.4);
+            transform: scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
         }
 
         h3 {
@@ -78,8 +73,7 @@
             font-weight: 600;
             margin-top: 0;
             margin-bottom: 2rem;
-            color: #0affc7;
-            text-shadow: 0 0 5px rgba(0, 255, 255, 0.8);
+            color: #fff;
         }
 
         /* ===== Input Fields ===== */
@@ -89,7 +83,7 @@
             padding: 12px;
             margin-bottom: 1.25rem;
             border-radius: 8px;
-            border: 1px solid rgba(0, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             background: rgba(255, 255, 255, 0.05);
             color: #f0f8ff;
             font-size: 1rem;
@@ -109,8 +103,8 @@
         }
 
         input:focus {
-            border-color: #0affc7;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+            border-color: #f0f8ff;
+            box-shadow: 0 0 10px rgba(240, 248, 255, 0.4);
         }
 
         /* ===== Buttons ===== */
@@ -139,19 +133,19 @@
         /* Primary Login/Signup button */
         button[onclick^="login"],
         button[onclick^="signup"] {
-            background: linear-gradient(45deg, #0affc7, #00e6b3);
-            color: #1a1a1a;
+            background: #2a688b;
+            color: #fff;
         }
 
         button[onclick^="login"]:hover,
         button[onclick^="signup"]:hover {
-            background: linear-gradient(45deg, #00e6b3, #0affc7);
+            background: #1a4d66;
         }
 
         /* Link buttons */
         .link-btn {
             background: transparent;
-            color: #0affc7;
+            color: #fff;
             font-size: 0.9em;
             text-decoration: none;
             text-transform: none;
@@ -165,8 +159,6 @@
         .link-btn:hover {
             text-decoration: underline;
             transform: none;
-            color: #00e6b3;
-            text-shadow: 0 0 5px rgba(0, 255, 255, 0.8);
             box-shadow: none;
         }
 
